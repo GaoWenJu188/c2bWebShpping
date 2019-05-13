@@ -12,18 +12,17 @@ import (
 	"github.com/astaxie/beego/orm"
 	"pyg/pyg/models"
 	"github.com/astaxie/beego/utils"
+	"strings"
 )
 
 type UserController struct {
 	beego.Controller
 }
-
 //展示注册页面
-func(this*UserController)ShowRegister(){
+func (this *UserController) ShowRegister() {
 	this.TplName = "register.html"
 }
-
-func RespFunc(this* UserController,resp map[string]interface{}){
+func RespFunc(this *UserController, resp map[string]interface{}) {
 	//3.把容器传递给前段
 	this.Data["json"] = resp
 	//4.指定传递方式
@@ -31,22 +30,21 @@ func RespFunc(this* UserController,resp map[string]interface{}){
 }
 
 type Message struct {
-	Message string
+	Message   string
 	RequestId string
-	BizId string
-	Code string
+	BizId     string
+	Code      string
 }
-
 //发送短信
-func(this*UserController)HandleSendMsg(){
+func (this *UserController) HandleSendMsg() {
 	//接受数据
 	phone := this.GetString("phone")
 	resp := make(map[string]interface{})
 
-	defer RespFunc(this,resp)
+	defer RespFunc(this, resp)
 	//返回json格式数据
 	//校验数据
-	if phone == ""{
+	if phone == "" {
 		beego.Error("获取电话号码失败")
 		//2.给容器赋值
 		resp["errno"] = 1
@@ -54,9 +52,9 @@ func(this*UserController)HandleSendMsg(){
 		return
 	}
 	//检查电话号码格式是否正确
-	reg,_ :=regexp.Compile(`^1[3-9][0-9]{9}$`)
+	reg, _ := regexp.Compile(`^1[3-9][0-9]{9}$`)
 	result := reg.FindString(phone)
-	if result == ""{
+	if result == "" {
 		beego.Error("电话号码格式错误")
 		//2.给容器赋值
 		resp["errno"] = 2
@@ -75,8 +73,7 @@ func(this*UserController)HandleSendMsg(){
 	//生成6位数随机数
 
 	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
-	vcode :=fmt.Sprintf("%06d",rnd.Int31n(1000000))
-
+	vcode := fmt.Sprintf("%06d", rnd.Int31n(1000000))
 
 	request := requests.NewCommonRequest()
 	request.Method = "POST"
@@ -88,7 +85,7 @@ func(this*UserController)HandleSendMsg(){
 	request.QueryParams["PhoneNumbers"] = phone
 	request.QueryParams["SignName"] = "品优购"
 	request.QueryParams["TemplateCode"] = "SMS_164275022"
-	request.QueryParams["TemplateParam"] = "{\"code\":"+vcode+"}"
+	request.QueryParams["TemplateParam"] = "{\"code\":" + vcode + "}"
 
 	response, err := client.ProcessCommonRequest(request)
 	if err != nil {
@@ -100,8 +97,8 @@ func(this*UserController)HandleSendMsg(){
 	}
 	//json数据解析
 	var message Message
-	json.Unmarshal(response.GetHttpContentBytes(),&message)
-	if message.Message != "OK"{
+	json.Unmarshal(response.GetHttpContentBytes(), &message)
+	if message.Message != "OK" {
 		beego.Error("电话号码格式错误")
 		//2.给容器赋值
 		resp["errno"] = 6
@@ -111,78 +108,253 @@ func(this*UserController)HandleSendMsg(){
 
 	resp["errno"] = 5
 	resp["errmsg"] = "发送成功"
-	resp["code"]=vcode
+	resp["code"] = vcode
 }
 //用户注册
-func (this*UserController)HandleRegister(){
-	phone:= this.GetString("phone")
-	password:= this.GetString("password")
-	repassword:=this.GetString("repassword")
-	if phone==""||password==""||repassword==""{
+func (this *UserController) HandleRegister() {
+	phone := this.GetString("phone")
+	password := this.GetString("password")
+	repassword := this.GetString("repassword")
+	if phone == "" || password == "" || repassword == "" {
 		beego.Error("用户信息获取错误")
-		this.Data["errmsg"]="用户信息获取错误"
-		this.TplName="register.html"
+		this.Data["errmsg"] = "用户信息获取错误"
+		this.TplName = "register.html"
 		return
 	}
-	if password!=repassword{
+	if password != repassword {
 		beego.Error("两次密码不一致")
-		this.Data["errmsg"]="两次密码不一致"
-		this.TplName="register.html"
+		this.Data["errmsg"] = "两次密码不一致"
+		this.TplName = "register.html"
 		return
 	}
 	//处理数据
 	//orm插入数据
-	o:=orm.NewOrm()
+	o := orm.NewOrm()
 	var user models.User
-	user.Name=phone
-	user.Pwd=password
-	user.Phone=phone
+	user.Name = phone
+	user.Pwd = password
+	user.Phone = phone
 	o.Insert(&user)
 	//注册成功之后去到激活叶页面，但是要传过去username用cookie
-	this.Ctx.SetCookie("userName",user.Name,60*10)
-	this.Redirect("/register-email",302)
+	this.Ctx.SetCookie("userName", user.Name, 60*10)
+	this.Redirect("/register-email", 302)
 }
 //展示用户激活email页面
-func (this*UserController)ShowRegisterEmail(){
-	this.TplName="register-email.html"
+func (this *UserController) ShowRegisterEmail() {
+	this.TplName = "register-email.html"
 }
 //处理用户激活页面业务
-func (this*UserController)HandleRegisterEmail(){
-	email:= this.GetString("email")
-	password:= this.GetString("password")
-	repassword:= this.GetString("repassword")
-	if email==""|| password==""||repassword==""{
+func (this *UserController) HandleRegisterEmail() {
+	email := this.GetString("email")
+	password := this.GetString("password")
+	repassword := this.GetString("repassword")
+	if email == "" || password == "" || repassword == "" {
 		beego.Error("输入数据不完整")
-		this.Data["errmsg"]="输入数据不完整"
-		this.TplName="register-email.html"
+		this.Data["errmsg"] = "输入数据不完整"
+		this.TplName = "register-email.html"
 		return
 	}
-	if password!=repassword{
+	if password != repassword {
 		beego.Error("两次密码不一致")
-		this.Data["errmsg"]="两次密码不一致"
-		this.TplName="register-email.html"
+		this.Data["errmsg"] = "两次密码不一致"
+		this.TplName = "register-email.html"
 		return
 	}
 	//对email格式检验
-	reg:= regexp.MustCompile(`^\w[\w\.-]*@[0-9a-z][0-9a-z-]*(\.[a-z]+)*\.[a-z]{2,6}$`)
-	result:= reg.FindString(email)
-	if result==""{
+	reg := regexp.MustCompile(`^\w[\w\.-]*@[0-9a-z][0-9a-z-]*(\.[a-z]+)*\.[a-z]{2,6}$`)
+	result := reg.FindString(email)
+	if result == "" {
 		beego.Error("email格式不正确")
-		this.Data["errmsg"]="email格式不正确"
-		this.TplName="register-email.html"
+		this.Data["errmsg"] = "email格式不正确"
+		this.TplName = "register-email.html"
 		return
 	}
 	//配置邮件信息
 	//utils
 	config := `{"username":"759948611@qq.com","password":"lgrrtpdfhwzebfeg","host":"smtp.qq.com","port":587}`
-	emailReg:= utils.NewEMail(config)
+	emailReg := utils.NewEMail(config)
 	//内容配置
-	emailReg.Subject="品优购用户激活"
-	emailReg.From="759948611@qq.com"
-	emailReg.To=[]string{email}
-	userName:= this.Ctx.GetCookie("userName")
-	emailReg.HTML=	`<a href="http://192.168.182.111:8080/active?userName=`+userName+`">点击激活用户</a>`
+	emailReg.Subject = "品优购用户激活"
+	emailReg.From = "759948611@qq.com"
+	emailReg.To = []string{email}
+	userName := this.Ctx.GetCookie("userName")
+	emailReg.HTML = `<a href="http://127.0.0.1:8080/active?userName=` + userName + `">点击激活用户</a>`
 	//发送邮件
 	emailReg.Send()
+	o := orm.NewOrm()
+	var user models.User
+	user.Name = userName
+
+	err := o.Read(&user, "Name")
+	if err != nil {
+		beego.Error("未查询到用户")
+		return
+	}
+	user.Email = email
+	o.Update(&user)
 	this.Ctx.WriteString("小伙子你很优秀哟")
+}
+//激活用户
+func (this *UserController) ActiveUser() {
+	userName := this.GetString("userName")
+	if userName == "" {
+		beego.Error("邮件未或取到用户名")
+		this.Redirect("/register-email", 302)
+		return
+	}
+	o := orm.NewOrm()
+	var user models.User
+	user.Name = userName
+	err := o.Read(&user, "Name")
+	if err != nil {
+		beego.Error("没有此用户", err)
+		this.Redirect("/register-email", 302)
+		return
+	}
+	user.Active = true
+	o.Update(&user, "Active")
+	this.TplName = "login.html"
+}
+//展示的登陆界面
+func (this *UserController) ShowLogin() {
+	userName := this.Ctx.GetCookie("loginName")
+	beego.Info("yonghuming:",userName)
+	if userName != "" {
+		this.Data["checked"] = "checked"
+	} else {
+		this.Data["checked"] = ""
+	}
+	this.Data["userName"] = userName
+	this.TplName = "login.html"
+}
+//用户登陆
+func (this *UserController) Login() {
+	userName := this.GetString("userName")
+	pwd := this.GetString("pwd")
+	if userName == "" || pwd == "" {
+		beego.Error("用户信息不完整")
+		this.TplName = "login.html"
+		return
+	}
+	o := orm.NewOrm()
+	var user models.User
+	user.Name = userName
+	err := o.Read(&user, "Name")
+	if err != nil {
+		beego.Error("用户名不正确")
+		this.TplName = "login.html"
+		return
+	}
+	user.Pwd = pwd
+	err = o.Read(&user, "Pwd")
+	if err != nil {
+		beego.Error("密码不正确")
+		this.TplName = "login.html"
+		return
+	}
+	if user.Active != true{
+		this.Data["errmsg"] = "该用户没有激活，请县激活！"
+		this.TplName = "login.html"
+		return
+	}
+	check:= this.GetString("m1")
+	if check == "2"{
+		this.Ctx.SetCookie("loginName", user.Name, 60*10)
+	}else {
+		this.Ctx.SetCookie("loginName",user.Name,-1)
+	}
+
+	this.SetSession("userName",userName)
+	this.Redirect("/index",302)
+}
+//推出登陆
+func (this*UserController)Logout(){
+	this.DelSession("userName")
+	this.Redirect("/index",302)
+}
+//展示用户中心项
+func (this*UserController)ShowUserCenterInfo(){
+	userName:= this.GetSession("userName")
+	var user models.User
+	o:=orm.NewOrm()
+	beego.Info(userName)
+	user.Name=userName.(string)
+	err:= o.Read(&user,"Name")
+	phone:=user.Name
+	//sphone:= strings.Split(phone,"")
+	//for i:=3;i<7;i++{
+	//	phone= strings.Replace(phone,sphone[i],"*",1)
+	//}
+	//beego.Info(phone)
+	//err := o.QueryTable("User").Filter("Name", userName.(string)).One(&user)
+	beego.Info(user)
+	if err!=nil{
+		beego.Error("未找到用户信息")
+		this.Redirect("/index",302)
+		return
+	}
+	var address models.Address
+	qs:=o.QueryTable("Address").RelatedSel("User").Filter("User__Name",userName)
+	qs.Filter("IsDefault",true).One(&address)
+	this.Data["address"]=address
+	this.Data["phone"]=phone
+	this.Data["user"]=user
+	this.Layout="layout.html"
+	this.TplName="user_center_info.html"
+}
+//展示用户地址信息
+func (this*UserController)ShowUserSite(){
+	userName:= this.GetSession("userName").(string)
+	o:=orm.NewOrm()
+	var address models.Address
+	qs:=o.QueryTable("Address").RelatedSel("User").Filter("User__Name",userName)
+	qs.Filter("IsDefault",true).One(&address)
+	this.Data["address"]=address
+	this.Layout="layout.html"
+	this.TplName="user_center_site.html"
+}
+//给用户添加地址信息
+func (this*UserController)HandleAddAddr(){
+	receiver:= this.GetString("receiver")
+	addr:= this.GetString("addr")
+	postCode:= this.GetString("postCode")
+	phone:= this.GetString("phone")
+	if receiver==""||addr==""||postCode==""||phone==""{
+		beego.Error("地址信息不完整")
+		this.TplName="user_center_site.html"
+		return
+	}
+	var user models.User
+	userName:= this.GetSession("userName")
+	o:=orm.NewOrm()
+	user.Name=userName.(string)
+	o.Read(&user,"Name")
+	var addres models.Address
+	addres.Receiver=receiver
+	addres.Addr=addr
+	addres.PostCode=postCode
+	addres.Phone=phone
+	addres.User=&user
+	//查询有没有默认值为true的,如果有的话就改为false
+	var oldAddres models.Address
+
+	qs:=o.QueryTable("Address").RelatedSel("User").Filter("User__Name",userName.(string))
+	err:= qs.Filter("IsDefault",true).One(&oldAddres)
+	if err==nil{
+		oldAddres.IsDefault=false
+		o.Update(&oldAddres,"IsDefault")
+	}
+	addres.IsDefault=true
+	_,err= o.Insert(&addres)
+	if err!=nil{
+		beego.Error("插入地址信息失败")
+		this.TplName="user_center_site.html"
+		return
+	}
+	this.Redirect("/user/userSite",302)
+}
+//展示用户订单
+func (this*UserController)ShowUserOrder(){
+	this.Layout="layout.html"
+	this.TplName="user_center_order.html"
 }
