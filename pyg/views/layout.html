@@ -5,6 +5,15 @@
 	<title>品优购，优质！优质！-用户中心</title>
 	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+	<script src="/static/js/jquery-1.12.4.min.js"></script>
+    <script>
+		$(function () {
+			$('.left_menu_con  ul li').click(function () {
+                $(this).siblings('li').removeClass('active');
+                $(this).addClass('active');
+            })
+        })
+	</script>
 </head>
 <body>
 	<div class="header_con">
@@ -15,20 +24,26 @@
 					欢迎您：<em>张 山</em>
 				</div>
 				<div class="login_btn fl">
-					<a href="login.html">登录</a>
+                    {{if compare "" .userName}}
+					<a href="/login">登录</a>
 					<span>|</span>
-					<a href="register.html">注册</a>
+					<a href="/register">注册</a>
+                     {{else}}
+                       欢迎用户:{{.userName}}
+                        <span>|</span>
+                        <a href="/user/logout">退出</a>
+                     {{end}}
 				</div>
 				<div class="user_link fl">
 					<span>|</span>
-					<a href="layout.html">用户中心</a>
+					<a href="/user/userCenterInfo">用户中心</a>
 					<span>|</span>
-					<a href="cart.html">我的购物车</a>
+					<a href="/user/userCart">我的购物车</a>
 					<span>|</span>
-					<a href="user_center_order.html">我的订单</a>
+					<a href="/user/userOrder">我的订单</a>
 				</div>
 			</div>
-		</div>		
+		</div>
 	</div>
 
 	<div class="search_bar clearfix">
@@ -45,8 +60,8 @@
 			<h3>用户中心</h3>
 			<ul>
 				<li><a href="/user/userCenterInfo" class="active">· 个人信息</a></li>
-				<li><a href="/user/userOrder" class="active">· 全部订单</a></li>
-				<li><a href="/user/userSite" class="active">· 收货地址</a></li>
+				<li><a href="/user/userOrder">· 全部订单</a></li>
+				<li><a href="/user/userSite" >· 收货地址</a></li>
 			</ul>
 		</div>
 

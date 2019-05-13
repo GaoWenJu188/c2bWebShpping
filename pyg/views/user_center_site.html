@@ -3,7 +3,7 @@
         <div class="site_con">
             <dl>
                 <dt>当前地址：</dt>
-            {{if compare  .address nil}}
+            {{if compare  .address nil }}
                 <dd>当前无默认地址</dd>
             {{else}}
                 <dd>{{.address.Addr}} ({{.address.Receiver}} 收) {{.address.Phone}}</dd>

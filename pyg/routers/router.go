@@ -29,6 +29,8 @@ func init() {
 	beego.Router("/user/userSite",&controllers.UserController{},"get:ShowUserSite;post:HandleAddAddr")
 	//展示用户订单
 	beego.Router("/user/userOrder",&controllers.UserController{},"get:ShowUserOrder")
+	//展示用户购物车
+	beego.Router("/user/userCart",&controllers.UserController{},"get:ShowUserCart")
 }
 func guolvfunc(ctx *context.Context){
 	userName:= ctx.Input.Session("userName")

@@ -281,11 +281,14 @@ func (this*UserController)ShowUserCenterInfo(){
 	user.Name=userName.(string)
 	err:= o.Read(&user,"Name")
 	phone:=user.Name
-	//sphone:= strings.Split(phone,"")
-	//for i:=3;i<7;i++{
-	//	phone= strings.Replace(phone,sphone[i],"*",1)
-	//}
-	//beego.Info(phone)
+	sphone:= strings.Split(phone,"")
+	for i:=3;i<7;i++{
+		//phone= strings.Replace(phone,sphone[i],"*",1)
+		sphone[i]="*"
+	}
+	phone= strings.Join(sphone,"")
+
+	beego.Info(sphone)
 	//err := o.QueryTable("User").Filter("Name", userName.(string)).One(&user)
 	beego.Info(user)
 	if err!=nil{
@@ -295,7 +298,8 @@ func (this*UserController)ShowUserCenterInfo(){
 	}
 	var address models.Address
 	qs:=o.QueryTable("Address").RelatedSel("User").Filter("User__Name",userName)
-	qs.Filter("IsDefault",true).One(&address)
+	err= qs.Filter("IsDefault",true).One(&address)
+	this.Data["userName"]=userName.(string)
 	this.Data["address"]=address
 	this.Data["phone"]=phone
 	this.Data["user"]=user
@@ -310,6 +314,7 @@ func (this*UserController)ShowUserSite(){
 	qs:=o.QueryTable("Address").RelatedSel("User").Filter("User__Name",userName)
 	qs.Filter("IsDefault",true).One(&address)
 	this.Data["address"]=address
+	this.Data["userName"]=userName
 	this.Layout="layout.html"
 	this.TplName="user_center_site.html"
 }
@@ -355,6 +360,25 @@ func (this*UserController)HandleAddAddr(){
 }
 //展示用户订单
 func (this*UserController)ShowUserOrder(){
+	userName:= this.GetSession("userName")
+	if userName==""{
+		beego.Error("用户未登陆")
+		this.Redirect("/index",302)
+		return
+	}
+	this.Data["userName"]=userName.(string)
 	this.Layout="layout.html"
 	this.TplName="user_center_order.html"
+}
+//展示用户购物车
+func (this *UserController)ShowUserCart(){
+	userName:= this.GetSession("userName")
+	if userName==""{
+		beego.Error("用户没有登陆")
+		this.Redirect("/index",302)
+		return
+	}
+	this.Data["userName"]=userName.(string)
+	this.Layout="user_center_head.html"
+	this.TplName="cart.html"
 }
