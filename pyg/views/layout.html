@@ -5,15 +5,7 @@
 	<title>品优购，优质！优质！-用户中心</title>
 	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
-	<script src="/static/js/jquery-1.12.4.min.js"></script>
-    <script>
-		$(function () {
-			$('.left_menu_con  ul li').click(function () {
-                $(this).siblings('li').removeClass('active');
-                $(this).addClass('active');
-            })
-        })
-	</script>
+
 </head>
 <body>
 	<div class="header_con">
@@ -59,9 +51,9 @@
 		<div class="left_menu_con clearfix">
 			<h3>用户中心</h3>
 			<ul>
-				<li><a href="/user/userCenterInfo" class="active">· 个人信息</a></li>
-				<li><a href="/user/userOrder">· 全部订单</a></li>
-				<li><a href="/user/userSite" >· 收货地址</a></li>
+				<li><a href="/user/userCenterInfo" {{if compare .tplName "1"}} class="active"{{end}} >· 个人信息</a></li>
+				<li><a href="/user/userOrder"  {{if compare .tplName "2"}} class="active"{{end}}>· 全部订单</a></li>
+				<li><a href="/user/userSite" {{if compare .tplName "3"}} class="active"{{end}} >· 收货地址</a></li>
 			</ul>
 		</div>
 

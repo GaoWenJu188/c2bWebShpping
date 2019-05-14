@@ -303,6 +303,7 @@ func (this*UserController)ShowUserCenterInfo(){
 	this.Data["address"]=address
 	this.Data["phone"]=phone
 	this.Data["user"]=user
+	this.Data["tplName"]="1"
 	this.Layout="layout.html"
 	this.TplName="user_center_info.html"
 }
@@ -315,6 +316,7 @@ func (this*UserController)ShowUserSite(){
 	qs.Filter("IsDefault",true).One(&address)
 	this.Data["address"]=address
 	this.Data["userName"]=userName
+	this.Data["tplName"]="3"
 	this.Layout="layout.html"
 	this.TplName="user_center_site.html"
 }
@@ -367,6 +369,7 @@ func (this*UserController)ShowUserOrder(){
 		return
 	}
 	this.Data["userName"]=userName.(string)
+	this.Data["tplName"]="2"
 	this.Layout="layout.html"
 	this.TplName="user_center_order.html"
 }
@@ -379,6 +382,7 @@ func (this *UserController)ShowUserCart(){
 		return
 	}
 	this.Data["userName"]=userName.(string)
+
 	this.Layout="user_center_head.html"
 	this.TplName="cart.html"
 }
