@@ -31,6 +31,12 @@ func init() {
 	beego.Router("/user/userOrder",&controllers.UserController{},"get:ShowUserOrder")
 	//展示用户购物车
 	beego.Router("/user/userCart",&controllers.UserController{},"get:ShowUserCart")
+	//展示用户生鲜页面
+	beego.Router("/index_sx",&controllers.GoodsController{},"get:ShowIndexSX")
+	//展示商品详情页面
+	beego.Router("/goodsDetail",&controllers.GoodsController{},"get:ShowGoodsDetail")
+	//展示商品列表也
+	beego.Router("/goodsType",&controllers.GoodsController{},"get:ShowList")
 }
 func guolvfunc(ctx *context.Context){
 	userName:= ctx.Input.Session("userName")
