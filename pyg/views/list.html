@@ -31,17 +31,7 @@
 		</div>		
 	</div>
 
-	<div class="search_bar clearfix">
-		<a href="index.html" class="logo fl"><img src="/static/images/logo.png"></a>
-		<div class="search_con fl">
-			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
-			<input type="button" class="input_btn fr" name="" value="搜索">
-		</div>
-		<div class="guest_cart fr">
-			<a href="#" class="cart_name fl">我的购物车</a>
-			<div class="goods_count fl">1</div>
-		</div>
-	</div>
+	{{.LayoutContent}}
 
 	<div class="navbar_con">
 		<div class="navbar clearfix">
@@ -50,7 +40,7 @@
 				<span></span>			
 				<ul class="subnav">
 					{{range .goodsType}}
-					<li><a href="/goodsType?Id={{.Id}}" class="fruit">{{.Name}}</a></li>
+					<li><a href="/goodsType?id={{.Id}}" class="fruit">{{.Name}}</a></li>
 					{{end}}
 				</ul>
 			</div>
@@ -75,11 +65,13 @@
 			<div class="new_goods">
 				<h3>新品推荐</h3>
 				<ul>
-					{{/*{{range	.newGoods}}*/}}
-                        {{/*<a href="/goodsDetail?Id={{.Id}}"><img src="http://192.168.182.111:8888/{{.Image}}"></a>*/}}
-                        {{/*<h4><a href="/goodsDetail?Id={{.Id}}">{{.Name}}</a></h4>*/}}
-                        {{/*<div class="prize">￥{{.Price}}</div>*/}}
-					{{/*{{end}}*/}}
+				{{range .newGoods}}
+                    <li>
+                        <a href="/goodsDetail?Id={{.Id}}"><img src="http://192.168.182.111:8888/{{.Image}}"></a>
+                        <h4><a href="/goodsDetail?Id={{.Id}}">{{.Name}}</a></h4>
+                        <div class="prize">￥{{.Price}}</div>
+                    </li>
+				{{end}}
 				</ul>
 			</div>
 		</div>

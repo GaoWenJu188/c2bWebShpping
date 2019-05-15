@@ -37,6 +37,8 @@ func init() {
 	beego.Router("/goodsDetail",&controllers.GoodsController{},"get:ShowGoodsDetail")
 	//展示商品列表也
 	beego.Router("/goodsType",&controllers.GoodsController{},"get:ShowList")
+	//搜索商品
+	beego.Router("/searchGoods",&controllers.GoodsController{},"post:HandleSearchGoods")
 }
 func guolvfunc(ctx *context.Context){
 	userName:= ctx.Input.Session("userName")

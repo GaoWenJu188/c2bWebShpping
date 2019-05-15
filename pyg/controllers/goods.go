@@ -96,7 +96,9 @@ func (this*GoodsController)ShowIndexSX(){
 
 	}
 	this.Data["goods"]=goods
-	this.TplName="index_sx.html"
+	this.Layout="index_sx.html"
+	this.TplName="search_gouwuche.html"
+
 }
 //展示商品详情页面
 func (this*GoodsController)ShowGoodsDetail(){
@@ -107,6 +109,11 @@ func (this*GoodsController)ShowGoodsDetail(){
 		return
 	}
 	o:=orm.NewOrm()
+	//或取类型
+	var goodsType []models.GoodsType
+	o.QueryTable("GoodsType").All(&goodsType)
+	this.Data["goodsType"]=goodsType
+
 	var goodsSku models.GoodsSKU
 /*	goodsSku.Id=id
 	o.Read(&goodsSku)*/
@@ -118,8 +125,10 @@ func (this*GoodsController)ShowGoodsDetail(){
 
 	this.Data["newGoods"]=newGoods
 	this.Data["goodsSku"]=goodsSku
-	this.TplName="detail.html"
+	this.Layout="detail.html"
+	this.TplName="search_gouwuche.html"
 }
+//独立于beego框架之外的，在那个框架都可以写。
 func PageEdit(pageCount int,pageIndex int)[]int{
 	//不足五页
 	var pages []int
@@ -143,7 +152,6 @@ func PageEdit(pageCount int,pageIndex int)[]int{
 
 	return pages
 }
-
 //展示商品列表页
 func(this*GoodsController)ShowList(){
 	id,err := this.GetInt("id")
@@ -158,8 +166,13 @@ func(this*GoodsController)ShowList(){
 	var goodsTypes []models.GoodsType
 	o.QueryTable("GoodsType").All(&goodsTypes)
 	this.Data["goodsType"]=goodsTypes
-	
-	//获取数据
+
+	//获取统一类型商品推荐
+	var newGoods []models.GoodsSKU
+	o.QueryTable("GoodsSKU").RelatedSel("GoodsType").Filter("GoodsType__Id",id).OrderBy("-Time").Limit(2,0).All(&newGoods)
+
+	this.Data["newGoods"]=newGoods
+
 
 	//处理数据
 
@@ -214,5 +227,21 @@ func(this*GoodsController)ShowList(){
 	this.Data["pageIndex"]=int(pageIndex)
 	this.Data["id"]=id
 	this.Data["goods"] = goods
-	this.TplName = "list.html"
+	this.Layout="list.html"
+	this.TplName ="search_gouwuche.html"
+}
+//搜索商品
+func(this*GoodsController)HandleSearchGoods(){
+	search:= this.GetString("searchGoods")
+	if search==""{
+		beego.Error("输入为空")
+		this.Redirect("index_sx",302)
+		return
+	}
+	var goods []models.GoodsSKU
+	o:=orm.NewOrm()
+	o.QueryTable("GoodsSKU").Filter("Name__icontains",search).All(&goods)
+	this.Data["goods"]=goods
+	this.Layout="search.html"
+	this.TplName="search_gouwuche.html"
 }
