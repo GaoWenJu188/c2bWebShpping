@@ -85,12 +85,17 @@
 		function SumTotalPrice() {
 			//获取选中的复选框的所在行的校级
 			totalPrice=0
+			totalCount=0
 			$('.cart_list_td').find(':checked').each(function () {
 			 	price= $(this).parents('ul').find('.col07').text()
 				totalPrice+=parseInt(price)
+                totalCount++
             })
 			//把总价放回显示总价的地方
 			$('.settlements').children('.col03').children('em').text(totalPrice.toFixed(2)+'元')
+			/把总件数放回显示的地方
+            $('.settlements').children('.col03').children('b').text(totalCount)
+
         }
         	SumTotalPrice()
 		//增加购物车商品的数量

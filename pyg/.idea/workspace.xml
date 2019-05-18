@@ -14,17 +14,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="cart.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="cart.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controllers/cart.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="36">
+            <state relative-caret-position="-342">
               <caret line="2" column="7" lean-forward="false" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
               <folding>
                 <element signature="e#167#195#0" expanded="false" />
                 <element signature="n#!!block;n#HandleAddCart#0" expanded="false" />
                 <element signature="n#!!block;n#ShowCart#0" expanded="false" />
                 <element signature="n#!!block;n#HandleUpCart#0" expanded="false" />
-                <element signature="n#!!block;n#DeleteCart#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -34,24 +33,25 @@
         <entry file="file://$PROJECT_DIR$/../../github.com/astaxie/beego/orm/types.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="139">
-              <caret line="47" column="46" lean-forward="true" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="46" />
+              <caret line="47" column="46" lean-forward="false" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="46" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="cart.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="cart.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/cart.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="292">
-              <caret line="167" column="39" lean-forward="false" selection-start-line="167" selection-start-column="39" selection-end-line="167" selection-end-column="39" />
+            <state relative-caret-position="141">
+              <caret line="162" column="0" lean-forward="false" selection-start-line="162" selection-start-column="0" selection-end-line="162" selection-end-column="0" />
               <folding>
                 <element signature="n#ul#0;n#!!top" expanded="false" />
                 <element signature="e#2265#2450#0#HTML" expanded="false" />
                 <element signature="e#2507#2826#0#HTML" expanded="false" />
-                <element signature="e#2868#3182#0#HTML" expanded="false" />
-                <element signature="e#3253#3981#0#HTML" expanded="false" />
-                <element signature="e#4042#5050#0#HTML" expanded="false" />
+                <element signature="e#2868#3324#0#HTML" expanded="false" />
+                <element signature="e#3395#4123#0#HTML" expanded="false" />
+                <element signature="e#4184#5192#0#HTML" expanded="false" />
+                <element signature="e#5246#5645#0#HTML" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -214,7 +214,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14470842" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.09287257" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4080645" sideWeight="0.53061223" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -253,7 +253,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="17" />
+      <option name="time" value="18" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -611,36 +611,36 @@
     <entry file="file://$PROJECT_DIR$/../../github.com/astaxie/beego/orm/types.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="139">
-          <caret line="47" column="46" lean-forward="true" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="46" />
+          <caret line="47" column="46" lean-forward="false" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="46" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/cart.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="162" column="0" lean-forward="false" selection-start-line="162" selection-start-column="0" selection-end-line="162" selection-end-column="0" />
+          <folding>
+            <element signature="n#ul#0;n#!!top" expanded="false" />
+            <element signature="e#2265#2450#0#HTML" expanded="false" />
+            <element signature="e#2507#2826#0#HTML" expanded="false" />
+            <element signature="e#2868#3324#0#HTML" expanded="false" />
+            <element signature="e#3395#4123#0#HTML" expanded="false" />
+            <element signature="e#4184#5192#0#HTML" expanded="false" />
+            <element signature="e#5246#5645#0#HTML" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/cart.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
+        <state relative-caret-position="-342">
           <caret line="2" column="7" lean-forward="false" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
           <folding>
             <element signature="e#167#195#0" expanded="false" />
             <element signature="n#!!block;n#HandleAddCart#0" expanded="false" />
             <element signature="n#!!block;n#ShowCart#0" expanded="false" />
             <element signature="n#!!block;n#HandleUpCart#0" expanded="false" />
-            <element signature="n#!!block;n#DeleteCart#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/cart.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="167" column="39" lean-forward="false" selection-start-line="167" selection-start-column="39" selection-end-line="167" selection-end-column="39" />
-          <folding>
-            <element signature="n#ul#0;n#!!top" expanded="false" />
-            <element signature="e#2265#2450#0#HTML" expanded="false" />
-            <element signature="e#2507#2826#0#HTML" expanded="false" />
-            <element signature="e#2868#3182#0#HTML" expanded="false" />
-            <element signature="e#3253#3981#0#HTML" expanded="false" />
-            <element signature="e#4042#5050#0#HTML" expanded="false" />
           </folding>
         </state>
       </provider>
