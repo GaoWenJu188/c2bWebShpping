@@ -14,6 +14,7 @@ type User struct {
 	Email     string     `orm:"null"`
 	Active    bool       `orm:"default(false)"`
 	Addresses []*Address `orm:"reverse(many)"`
+	OrderInfo   []*OrderInfo `orm:"reverse(many)"`
 }
 
 type Address struct {
@@ -24,6 +25,7 @@ type Address struct {
 	Phone     string `orm:"size(11)"`
 	IsDefault bool   `orm:"default(false)"` //设置默认地址
 	User      *User  `orm:"rel(fk)"`
+	OrderInfo   []*OrderInfo `orm:"reverse(many)"`
 }
 type TpshopCategory struct {
 	Id         int
@@ -103,12 +105,36 @@ type IndexPromotionBanner struct {
 	Image string                    //活动图片
 	Index int    `orm:"default(0)"` //展示顺序
 }
+type OrderInfo struct {//订单表
+	Id 				int
+	OrderId         string  `orm:"unique"`       //订单号
+	User 			*User	`orm:"rel(fk)"`		//用户
+	Address 		*Address`orm:"rel(fk)"`		//地址
+	PayMethod 		int							//付款方式
+	TotalCount 	int		`orm:"default(1)"`	//商品数量
+	TotalPrice 	int							//商品总价
+	TransitPrice 	int							//运费
+	Orderstatus 	int 	`orm:"default(0)"`	//订单状态
+	TradeNo 		string	`orm:"default('')"`	//支付编号
+	Time			time.Time `orm:"auto_now_add"`		//订单时间
+	OrderGoods   []*OrderGoods `orm:"reverse(many)"`
+}
+
+type OrderGoods struct {//订单商品表
+	Id 			int
+	OrderInfo 	*OrderInfo	`orm:"rel(fk)"`	//订单
+	GoodsSKU 	*GoodsSKU	`orm:"rel(fk)"`	//商品
+	Count 		int		`orm:"default(1)"`	//商品数量
+	Price 		int							//商品价格
+	Comment 	string	`orm:"default('')"` //评论
+}
+
 
 func init() {
 	//注册数据库
 	orm.RegisterDataBase("default", "mysql", "root:123456@tcp(127.0.0.1:3306)/pyg")
 	//注册表结构
-	orm.RegisterModel(new(User), new(Address), new(TpshopCategory),new(Goods),new(GoodsImage),new(GoodsSKU),new(GoodsType),new(IndexGoodsBanner),new(IndexPromotionBanner),new(IndexTypeGoodsBanner))
+	orm.RegisterModel(new(User), new(Address), new(TpshopCategory),new(Goods),new(GoodsImage),new(GoodsSKU),new(GoodsType),new(IndexGoodsBanner),new(IndexPromotionBanner),new(IndexTypeGoodsBanner),new(OrderGoods),new(OrderInfo))
 	//跑起来
 	orm.RunSyncdb("default", false, true)
 }

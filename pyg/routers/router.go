@@ -47,6 +47,15 @@ func init() {
 	beego.Router("upCart",&controllers.CartController{},"post:HandleUpCart")
 	//删除购物车行数据
 	beego.Router("/user/deleteCart",&controllers.CartController{},"post:DeleteCart")
+	//添加商品到订单
+	beego.Router("/user/addOrder",&controllers.OrderController{},"post:ShowOrder")
+	//提交订单
+	beego.Router("/pushOrder",&controllers.OrderController{},"post:HandlePushOrder")
+	//用户中心订单展示及处理
+	beego.Router("/user/userOrder",&controllers.UserController{},"get:ShowUserOrder")
+	//支付
+	beego.Router("/pay",&controllers.OrderController{},"get:Pay")
+
 }
 func guolvfunc(ctx *context.Context){
 	userName:= ctx.Input.Session("userName")

@@ -360,7 +360,7 @@ func (this*UserController)HandleAddAddr(){
 	}
 	this.Redirect("/user/userSite",302)
 }
-//展示用户订单
+////用户中心订单的展示
 func (this*UserController)ShowUserOrder(){
 	userName:= this.GetSession("userName")
 	if userName==""{
@@ -368,6 +368,25 @@ func (this*UserController)ShowUserOrder(){
 		this.Redirect("/index",302)
 		return
 	}
+	//获取订单信息
+	o:=orm.NewOrm()
+	var orderInfos []models.OrderInfo
+	o.QueryTable("OrderInfo").RelatedSel("User").Filter("User__Name",userName.(string)).OrderBy("-Time").All(&orderInfos)
+	//定义宗容器
+	var orders []map[string]interface{}
+
+	for _,v:=range orderInfos{
+		temp:=make(map[string]interface{})
+		//获取当前订单的所有商品
+		var orderGoods []models.OrderGoods
+		o.QueryTable("OrderGoods").RelatedSel("OrderInfo","GoodsSKU").Filter("OrderInfo__Id",v.Id).All(&orderGoods)
+
+		temp["orderGoods"]=orderGoods
+		temp["orderInfo"]=v
+		orders=append(orders,temp)
+	}
+
+	this.Data["orders"]=orders
 	this.Data["userName"]=userName.(string)
 	this.Data["tplName"]="2"
 	this.Layout="layout.html"
@@ -386,3 +405,5 @@ func (this *UserController)ShowUserCart(){
 	this.Layout="user_center_head.html"
 	this.TplName="cart.html"
 }
+
+
