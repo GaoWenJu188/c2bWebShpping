@@ -12,17 +12,17 @@
     <div class="has_view_list">
         <ul class="goods_type_list clearfix">
 
-
+            {{range .goods}}
             <li>
-                <a href="detail.html"><img src="/static/images/goods/goods003.jpg"></a>
-                <h4><a href="detail.html">大兴大棚草莓</a></h4>
+                <a href="detail.html"><img src="http://192.168.182.111:8888/{{.Image}}"></a>
+                <h4><a href="detail.html">{{.Name}}</a></h4>
                 <div class="operate">
-                    <span class="prize">￥16.80</span>
-                    <span class="unit">16.80/500g</span>
+                    <span class="prize">￥{{.Price}}</span>
+                    <span class="unit">{{.Price}}/{{.Unite}}</span>
                     <a href="#" class="add_goods" title="加入购物车"></a>
                 </div>
             </li>
-
+            {{end}}
 
         </ul>
     </div>

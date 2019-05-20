@@ -13,6 +13,7 @@ import (
 	"pyg/pyg/models"
 	"github.com/astaxie/beego/utils"
 	"strings"
+	"github.com/gomodule/redigo/redis"
 )
 
 type UserController struct {
@@ -299,6 +300,26 @@ func (this*UserController)ShowUserCenterInfo(){
 	var address models.Address
 	qs:=o.QueryTable("Address").RelatedSel("User").Filter("User__Name",userName)
 	err= qs.Filter("IsDefault",true).One(&address)
+
+	//获取用户登陆时候的浏览记录、
+	conn,err:= redis.Dial("tcp","127.0.0.1:6379")
+	if err!=nil{
+		beego.Info("连接redis失败")
+		return
+	}
+	defer conn.Close()
+	goodsIds,_:= redis.Ints(conn.Do("lrange","history_"+userName.(string),0,4))
+	var goods []models.GoodsSKU
+	for _,v:=range goodsIds{
+		var goodsSku models.GoodsSKU
+		goodsSku.Id=v
+		o.Read(&goodsSku)
+		goods=append(goods,goodsSku)
+	}
+
+	this.Data["goods"]=goods
+
+
 	this.Data["userName"]=userName.(string)
 	this.Data["address"]=address
 	this.Data["phone"]=phone

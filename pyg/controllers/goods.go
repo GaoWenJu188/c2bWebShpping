@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"pyg/pyg/models"
 	"math"
+	"github.com/gomodule/redigo/redis"
 )
 
 type GoodsController struct {
@@ -122,6 +123,19 @@ func (this*GoodsController)ShowGoodsDetail(){
 	var newGoods []models.GoodsSKU
 	qs:=o.QueryTable("GoodsSKU").RelatedSel("GoodsType").Filter("GoodsType__Name",goodsSku.GoodsType.Name)
 	qs.OrderBy("-Time").Limit(2,0).All(&newGoods)
+
+	//用户登陆的时候记录点开详情页面的数据
+	name := this.GetSession("userName")
+	if name !=nil{
+		conn,err:= redis.Dial("tcp","127.0.0.1:6379")
+		if err==nil{
+			defer conn.Close()
+			conn.Do("lrem","history_"+name.(string),0,id)
+			_,err:= conn.Do("lpush","history_"+name.(string),id)
+			beego.Info(err)
+		}
+	}
+
 
 	this.Data["newGoods"]=newGoods
 	this.Data["goodsSku"]=goodsSku
